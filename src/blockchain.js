@@ -193,14 +193,14 @@ class Blockchain {
   async validateChain() {
     const errorLog = [];
 
-    for (let i = 1; i <= this.height; i++) {
+    for (let i = 0; i <= this.height; i++) {
       if (!(await this.chain[i].validate())) {
         errorLog.push(
           new Error(`The block with hash ${this.chain[i].hash} is invalid`),
         );
       }
 
-      if (this.chain[i].previousBlockHash !== this.chain[i - 1].hash) {
+      if (i > 0 && this.chain[i].previousBlockHash !== this.chain[i - 1].hash) {
         errorLog.push(
           new Error(
             `The block with hash ${this.chain[i].hash} has an invalid previous block hash`,
