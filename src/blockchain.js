@@ -61,6 +61,14 @@ class Blockchain {
    * that this method is a private method.
    */
   async _addBlock(block) {
+    // First of all, we make sure that the chain is valid
+    const chainErrors = await this.validateChain();
+
+    // If it's not, we throw an error
+    if (chainErrors.length > 0) {
+      throw new Error('The chain is invalid');
+    }
+
     // increase the height
     this.height++;
 
