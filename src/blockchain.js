@@ -173,6 +173,7 @@ class Blockchain {
   async getStarsByWalletAddress(address) {
     const stars = [];
 
+    // We start from index 1 because we can exclude the genesis block
     for (let i = 1; i <= this.height; i++) {
       const blockData = await this.chain[i].getBData();
 
@@ -193,6 +194,7 @@ class Blockchain {
   async validateChain() {
     const errorLog = [];
 
+    // In this case, we start from 0 because the genesis block needs to be validated too
     for (let i = 0; i <= this.height; i++) {
       if (!(await this.chain[i].validate())) {
         errorLog.push(
@@ -200,6 +202,8 @@ class Blockchain {
         );
       }
 
+      // However, the genesis block does not have a previous block, so we need to make
+      // sure that we exclude it from this check
       if (i > 0 && this.chain[i].previousBlockHash !== this.chain[i - 1].hash) {
         errorLog.push(
           new Error(
